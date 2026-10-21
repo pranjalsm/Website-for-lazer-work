@@ -8,7 +8,8 @@ import {
 const PHONE = '918483050143'
 const DISPLAY_PHONE = '+91 84830 50143'
 const EMAIL = 'souignymithri@gmail.com'
-const INSTAGRAM_USERNAME = 'YOUR_INSTAGRAM_USERNAME'
+// Add the Instagram username (without @) once the account is created to show it in the contact section
+const INSTAGRAM_USERNAME = ''
 
 const services = [
   { icon: Wrench, number: '01', title: 'Laser Head Service & Repair', text: 'Inspection and troubleshooting support for industrial fiber laser cutting heads.' },
@@ -32,10 +33,10 @@ function App() {
     event.preventDefault()
     const message = [
       'Hello Soujany, I would like to enquire about fiber laser head service.',
-      `Name: ${form.name || 'Not provided'}`,
-      `Company: ${form.company || 'Not provided'}`,
-      `Laser head brand/model: ${form.brand || 'Not provided'}`,
-      `Issue: ${form.message || 'Please contact me'}`
+      `Name: ${form.name.trim() || 'Not provided'}`,
+      `Company: ${form.company.trim() || 'Not provided'}`,
+      `Laser head brand/model: ${form.brand.trim() || 'Not provided'}`,
+      `Issue: ${form.message.trim() || 'Please contact me'}`
     ].join('\n')
     window.open(whatsappUrl(message), '_blank', 'noopener,noreferrer')
   }
@@ -57,10 +58,10 @@ function App() {
             <span className="brand-mark"><Zap size={23} fill="currentColor" /></span>
             <span className="brand-words"><strong>LASER<span>CARE</span></strong><small>HEAD SERVICE & MAINTENANCE</small></span>
           </a>
-          <button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+          <button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen} aria-controls="site-nav">
             {menuOpen ? <X /> : <Menu />}
           </button>
-          <nav className={menuOpen ? 'nav-links open' : 'nav-links'}>
+          <nav id="site-nav" className={menuOpen ? 'nav-links open' : 'nav-links'}>
             <a href="#services" onClick={closeMenu}>Services</a>
             <a href="#brands" onClick={closeMenu}>Brands</a>
             <a href="#work" onClick={closeMenu}>Our Work</a>
@@ -170,7 +171,7 @@ function App() {
             <div className="work-grid">
               <article className="work-card work-feature">
                 <div className="work-art work-art-one"><div className="art-rings"></div><div className="art-beam"></div><div className="art-label">SERVICE DEMONSTRATION</div><div className="play-button"><Play size={21} fill="currentColor" /></div></div>
-                <div className="work-caption"><div><span>VIDEO PLACEHOLDER</span><h3>Laser head servicing demo</h3></div><span className="coming-soon">Coming soon</span></div>
+                <div className="work-caption"><div><span>DEMO VIDEO</span><h3>Laser head servicing demo</h3></div><span className="coming-soon">Coming soon</span></div>
               </article>
               <article className="work-card">
                 <div className="work-art work-art-two"><Wrench size={50} strokeWidth={1.1} /><span className="art-label">MAINTENANCE</span></div>
@@ -181,7 +182,7 @@ function App() {
                 <div className="work-caption"><div><span>PHOTO GALLERY</span><h3>Equipment & components</h3></div><span className="coming-soon">Coming soon</span></div>
               </article>
             </div>
-            <p className="work-disclaimer">These are design placeholders, not photographs of completed jobs. We'll replace them with genuine work media before launch.</p>
+            <p className="work-disclaimer">Photos and videos of real service work will be added here soon.</p>
           </div>
         </section>
 
@@ -189,7 +190,7 @@ function App() {
           <div className="container areas-layout">
             <div><div className="eyebrow">SERVICE LOCATIONS</div><h2>Local support.<br /><span>Across the region.</span></h2><p>Contact us to discuss your location, equipment and service requirements.</p></div>
             <div className="areas-list">
-              {['Kolhapur', 'Sangli', 'Satara'].map((city, i) => <div className="area-row" key={city}><span className="area-index">0{i + 1}</span><MapPin size={18} /><strong>{city}</strong><span className="area-state">Maharashtra, India</span><ArrowRight size={17} /></div>)}
+              {['Kolhapur', 'Sangli', 'Satara'].map((city, i) => <div className="area-row" key={city}><span className="area-index">0{i + 1}</span><MapPin size={18} /><strong>{city}</strong><span className="area-state">Maharashtra, India</span></div>)}
             </div>
           </div>
         </section>
@@ -202,15 +203,15 @@ function App() {
               <p>Share your laser head brand, model and the issue you're facing. We'll open WhatsApp with your details ready to send.</p>
               <div className="contact-method"><span><Phone size={19} /></span><div><small>CALL DIRECTLY</small><a href={`tel:+${PHONE}`}>{DISPLAY_PHONE}</a></div></div>
               <div className="contact-method"><span><MessageCircle size={19} /></span><div><small>WHATSAPP</small><a href={whatsappUrl()} target="_blank" rel="noreferrer">Start a conversation <ArrowRight size={14} /></a></div></div>
-              <div className="contact-method"><span><Instagram size={19} /></span><div><small>INSTAGRAM</small><a href={INSTAGRAM_USERNAME === 'YOUR_INSTAGRAM_USERNAME' ? 'https://www.instagram.com/' : `https://www.instagram.com/${INSTAGRAM_USERNAME}/`} target="_blank" rel="noreferrer">{INSTAGRAM_USERNAME === 'YOUR_INSTAGRAM_USERNAME' ? 'Add professional profile later' : `@${INSTAGRAM_USERNAME}`} <ArrowRight size={14} /></a></div></div>
+              {INSTAGRAM_USERNAME && <div className="contact-method"><span><Instagram size={19} /></span><div><small>INSTAGRAM</small><a href={`https://www.instagram.com/${INSTAGRAM_USERNAME}/`} target="_blank" rel="noreferrer">@{INSTAGRAM_USERNAME} <ArrowRight size={14} /></a></div></div>}
               <div className="contact-method"><span><MapPin size={19} /></span><div><small>SERVICE AREA</small><strong>Kolhapur · Sangli · Satara</strong></div></div>
             </div>
             <form className="inquiry-form" onSubmit={submitInquiry}>
               <div className="form-head"><span>QUICK SERVICE ENQUIRY</span><small>Usually takes less than a minute</small></div>
-              <label>Your name<input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Enter your name" /></label>
+              <label>Your name<input value={form.name} required onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Enter your name" /></label>
               <label>Company name <span className="optional">(optional)</span><input value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} placeholder="Your company" /></label>
               <label>Laser head brand / model<input value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} placeholder="e.g. RayTools, WSX..." /></label>
-              <label>How can we help?<textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Describe the issue or service required" rows="4" /></label>
+              <label>How can we help?<textarea value={form.message} required onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Describe the issue or service required" rows="4" /></label>
               <button type="submit" className="button button-primary form-submit"><MessageCircle size={17} /> Send enquiry on WhatsApp <ArrowRight size={16} /></button>
               <p className="form-privacy">This form opens WhatsApp. Your details are not stored by this website.</p>
             </form>
